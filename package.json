@@ -1,0 +1,22 @@
+{
+  "private": true,
+  "name": "wallets",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "run:use-wallets": "yarn workspace @cosmostation/use-wallets run",
+    "add:use-wallets": "yarn workspace @cosmostation/use-wallets add",
+    "remove:use-wallets": "yarn workspace @cosmostation/use-wallets remove",
+    "run:wallets": "yarn workspace @cosmostation/wallets run",
+    "add:wallets": "yarn workspace @cosmostation/wallets add",
+    "remove:wallets": "yarn workspace @cosmostation/wallets remove"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "workspaces": [
+    "packages/wallets",
+    "packages/use-wallets"
+  ]
+}
