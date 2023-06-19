@@ -23,7 +23,15 @@ export default function useCosmosWallets() {
 
   const walletHandler = useCallback(() => {
     setWallets(getCosmosWallets());
-  }, []);
+  }, [setWallets]);
+
+  useEffect(() => {
+    window.addEventListener('__cosmosWallets', walletHandler);
+
+    return () => {
+      window.removeEventListener('__cosmosWallets', walletHandler);
+    };
+  }, [walletHandler]);
 
   useEffect(() => {
     setTimeout(() => {
@@ -34,13 +42,7 @@ export default function useCosmosWallets() {
         selectWallet(savedWalletName);
       }
     }, 500);
-
-    addEventListener('__cosmosWallets', walletHandler);
-
-    return () => {
-      removeEventListener('__cosmosWallets', walletHandler);
-    };
-  }, [selectWallet, walletHandler]);
+  }, [selectWallet]);
 
   return { wallets, currentWallet, selectWallet };
 }
