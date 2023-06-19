@@ -1,6 +1,6 @@
+import { useCallback, useEffect, useState } from 'react';
 import type { CosmosWallet } from '@cosmostation/wallets';
 import { getCosmosWallets } from '@cosmostation/wallets';
-import { useCallback, useEffect, useState } from 'react';
 
 export default function useCosmosWallets() {
   const [wallets, setWallets] = useState<CosmosWallet[]>([]);
@@ -10,6 +10,7 @@ export default function useCosmosWallets() {
   const selectWallet = useCallback(
     (name: string) => {
       const wallet = wallets.find((w) => w.name === name);
+
       if (wallet) {
         setCurrentWallet(wallet);
         localStorage.setItem('__cosmosWallets', name);
@@ -22,8 +23,8 @@ export default function useCosmosWallets() {
   );
 
   const walletHandler = useCallback(() => {
-    setWallets(getCosmosWallets());
-  }, [setWallets]);
+    setWallets([...getCosmosWallets()]);
+  }, []);
 
   useEffect(() => {
     window.addEventListener('__cosmosWallets', walletHandler);
@@ -34,15 +35,19 @@ export default function useCosmosWallets() {
   }, [walletHandler]);
 
   useEffect(() => {
-    setTimeout(() => {
-      const savedWalletName = localStorage.getItem('__cosmosWallets');
+    const cosmosWallets = getCosmosWallets();
+    setWallets(cosmosWallets);
 
-      setWallets(getCosmosWallets());
-      if (savedWalletName) {
-        selectWallet(savedWalletName);
-      }
-    }, 500);
-  }, [selectWallet]);
+    const savedWalletName = localStorage.getItem('__cosmosWallets');
+    const wallet = cosmosWallets.find((w) => w.name === savedWalletName);
+
+    if (wallet) {
+      setCurrentWallet(wallet);
+    } else {
+      localStorage.removeItem('__cosmosWallets');
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   return { wallets, currentWallet, selectWallet };
 }
