@@ -1,6 +1,6 @@
 {
   "name": "@cosmostation/use-wallets",
-  "version": "1.0.3-alpha.0",
+  "version": "1.0.3",
   "description": "Wallets hook for react",
   "source": "src/index.ts",
   "main": "dist/index.js",
