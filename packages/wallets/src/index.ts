@@ -12,6 +12,7 @@ import {
   CosmosSignDirectDoc,
   CosmosSignDirectResponse,
 } from './cosmos';
+
 export {
   registCosmosWallet,
   getCosmosWallets,

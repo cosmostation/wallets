@@ -1,10 +1,10 @@
 {
   "name": "@cosmostation/use-wallets",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Wallets hook for react",
   "source": "src/index.ts",
   "main": "dist/index.js",
-  "module": "dist/index.mjs",
+  "module": "dist/index.module.js",
   "umd:main": "dist/index.umd.js",
   "exports": {
     "types": "./dist/index.d.ts",
@@ -12,8 +12,20 @@
     "default": "./dist/index.modern.mjs"
   },
   "scripts": {
-    "build": "rm -rf ./dist/*; microbundle build --entry src/index.ts --name @cosmostation/use-wallets --tsconfig tsconfig.json",
-    "eslint": "eslint"
+    "build": "rm -rf ./dist/*; microbundle build --entry src/index.ts --name @cosmostation/wallets --tsconfig tsconfig.json; rm -f cosmostation-use-wallets.tgz; yarn pack --filename cosmostation-use-wallets.tgz",
+    "eslint": "eslint",
+    "patch:prerelease": "yarn version --prerelease --preid alpha --no-git-tag-version",
+    "postpatch:prerelease": "yarn run build",
+    "patch": "yarn version --patch --no-git-tag-version",
+    "postpatch": "yarn run build",
+    "minor": "yarn version --minor --no-git-tag-version",
+    "postminor": "yarn run build",
+    "major": "yarn version --major --no-git-tag-version",
+    "postmajor": "yarn run build",
+    "prepublish:latest": "yarn run build",
+    "publish:latest": "yarn publish cosmostation-use-wallets.tgz --access public",
+    "prepublish:alpha": "yarn run build",
+    "publish:alpha": "yarn publish cosmostation-use-wallets.tgz --tag alpha --access public"
   },
   "engines": {
     "node": ">= 16.0.0"
@@ -49,6 +61,6 @@
     "typescript": "^5.1.3"
   },
   "dependencies": {
-    "@cosmostation/wallets": "^1.0.0"
+    "@cosmostation/wallets": "^1.0.1"
   }
 }

@@ -4,10 +4,7 @@ declare global {
   }
 }
 
-export type CosmosPublicKeyType =
-  | '/cosmos.crypto.secp256k1.PubKey'
-  | '/ethermint.crypto.v1.ethsecp256k1.PubKey'
-  | '/injective.crypto.v1beta1.ethsecp256k1.PubKey';
+export type CosmosPublicKeyType = 'secp256k1' | 'ethsecp256k1';
 
 export interface CosmosSignAminoDoc {
   chain_id: string;
