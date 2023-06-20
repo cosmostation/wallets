@@ -1,15 +1,14 @@
-import { useCallback, useEffect, useState } from 'react';
-import type { CosmosWallet } from '@cosmostation/wallets';
+import { useCallback, useEffect, useContext } from 'react';
 import { getCosmosWallets } from '@cosmostation/wallets';
+import { CosmosActionsContext, CosmosValuesContext } from './CosmosProvider';
 
 export default function useCosmosWallets() {
-  const [wallets, setWallets] = useState<CosmosWallet[]>([]);
-
-  const [currentWallet, setCurrentWallet] = useState<CosmosWallet | null>(null);
+  const { setCosmosWallets, setCurrentWallet } = useContext(CosmosActionsContext);
+  const { cosmosWallets, currentWallet } = useContext(CosmosValuesContext);
 
   const selectWallet = useCallback(
     (name: string) => {
-      const wallet = wallets.find((w) => w.name === name);
+      const wallet = cosmosWallets.find((w) => w.name === name);
 
       if (wallet) {
         setCurrentWallet(wallet);
@@ -19,12 +18,12 @@ export default function useCosmosWallets() {
         localStorage.removeItem('__cosmosWallets');
       }
     },
-    [wallets]
+    [cosmosWallets, setCurrentWallet]
   );
 
   const walletHandler = useCallback(() => {
-    setWallets([...getCosmosWallets()]);
-  }, []);
+    setCosmosWallets([...getCosmosWallets()]);
+  }, [setCosmosWallets]);
 
   useEffect(() => {
     window.addEventListener('__cosmosWallets', walletHandler);
@@ -36,7 +35,7 @@ export default function useCosmosWallets() {
 
   useEffect(() => {
     const cosmosWallets = getCosmosWallets();
-    setWallets(cosmosWallets);
+    setCosmosWallets(cosmosWallets);
 
     const savedWalletName = localStorage.getItem('__cosmosWallets');
     const wallet = cosmosWallets.find((w) => w.name === savedWalletName);
@@ -49,5 +48,5 @@ export default function useCosmosWallets() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  return { wallets, currentWallet, selectWallet };
+  return { cosmosWallets, currentWallet, selectWallet };
 }
