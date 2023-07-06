@@ -7,12 +7,12 @@ export default function useCosmosWallets() {
   const { cosmosWallets, currentWallet } = useContext(CosmosValuesContext);
 
   const selectWallet = useCallback(
-    (name: string) => {
-      const wallet = cosmosWallets.find((w) => w.name === name);
+    (id: string) => {
+      const wallet = cosmosWallets.find((w) => w.id === id);
 
       if (wallet) {
         setCurrentWallet(wallet);
-        localStorage.setItem('__cosmosWallets', name);
+        localStorage.setItem('__cosmosWallets', id);
       } else {
         setCurrentWallet(null);
         localStorage.removeItem('__cosmosWallets');

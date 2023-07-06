@@ -2,7 +2,7 @@ import { CosmosRequestAccountResponse } from '@cosmostation/wallets';
 import { useCallback, useEffect, useState } from 'react';
 import useCosmosWallets from './useCosmosWallets';
 
-export default function useCosmosAccount(chainID: string) {
+export default function useCosmosAccount(chainId: string) {
   const { currentWallet } = useCosmosWallets();
 
   const [account, setAccount] = useState<CosmosRequestAccountResponse>();
@@ -11,8 +11,8 @@ export default function useCosmosAccount(chainID: string) {
     try {
       if (currentWallet) {
         const supportedChainIDs = await currentWallet.methods.getSupportedChainIDs();
-        const responseAccount = supportedChainIDs.includes(chainID)
-          ? await currentWallet.methods.requestAccount(chainID)
+        const responseAccount = supportedChainIDs.includes(chainId)
+          ? await currentWallet.methods.requestAccount(chainId)
           : undefined;
 
         setAccount(responseAccount);
@@ -22,7 +22,7 @@ export default function useCosmosAccount(chainID: string) {
     } catch {
       setAccount(undefined);
     }
-  }, [chainID, currentWallet]);
+  }, [chainId, currentWallet]);
 
   useEffect(() => {
     requestAccount();
