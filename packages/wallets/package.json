@@ -1,6 +1,6 @@
 {
   "name": "@cosmostation/wallets",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "Wallets",
   "source": "src/index.ts",
   "main": "dist/index.js",

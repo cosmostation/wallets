@@ -110,7 +110,9 @@ export interface CosmosWallet {
   events: CosmosEvents;
 }
 
-export const registCosmosWallet = (wallet: CosmosWallet) => {
+export type RegistCosmosWallet = Omit<CosmosWallet, 'id'>;
+
+export const registCosmosWallet = (wallet: RegistCosmosWallet) => {
   if (window.__cosmosWallets == undefined) {
     window.__cosmosWallets = [];
   }

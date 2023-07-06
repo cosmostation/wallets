@@ -11,6 +11,7 @@ import {
   CosmosSignAminoResponse,
   CosmosSignDirectDoc,
   CosmosSignDirectResponse,
+  RegistCosmosWallet,
 } from './cosmos';
 
 export {
@@ -26,4 +27,5 @@ export {
   CosmosSignAminoResponse,
   CosmosSignDirectDoc,
   CosmosSignDirectResponse,
+  RegistCosmosWallet,
 };
