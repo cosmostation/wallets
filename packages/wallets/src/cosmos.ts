@@ -98,15 +98,15 @@ export interface CosmosMethods {
     document: CosmosSignDirectDoc,
     options?: { signer?: string; editMode?: { fee?: boolean; memo?: boolean } }
   ) => Promise<CosmosSignDirectResponse>;
-  signMessage: (chainId: string, message: string, signer: string) => Promise<CosmosSignMessageResponse>;
-  verifyMessage: (
+  getSupportedChainIds: () => Promise<string[]>;
+  signMessage?: (chainId: string, message: string, signer: string) => Promise<CosmosSignMessageResponse>;
+  verifyMessage?: (
     chainId: string,
     message: string,
     signer: string,
     signature: string,
     publicKey: string
   ) => Promise<boolean>;
-  getSupportedChainIds: () => Promise<string[]>;
   sendTransaction?: (
     chainId: string,
     txBytes: Uint8Array | string,
