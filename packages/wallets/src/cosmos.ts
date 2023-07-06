@@ -71,6 +71,14 @@ export interface CosmosSendTransactionResponse {
   };
 }
 
+export interface CosmosSignMessageResponse {
+  publicKey: {
+    type: CosmosPublicKeyType;
+    value: string;
+  };
+  signature: string;
+}
+
 type CosmosEventTypes = {
   AccountChanged: () => void;
 };
@@ -79,6 +87,7 @@ type CosmosEventTypeKeys = keyof CosmosEventTypes;
 
 export interface CosmosMethods {
   requestAccount: (chainId: string) => Promise<CosmosRequestAccountResponse>;
+
   signAmino: (
     chainId: string,
     document: CosmosSignAminoDoc,
@@ -89,12 +98,20 @@ export interface CosmosMethods {
     document: CosmosSignDirectDoc,
     options?: { signer?: string; editMode?: { fee?: boolean; memo?: boolean } }
   ) => Promise<CosmosSignDirectResponse>;
-  sendTransaction: (
+  signMessage: (chainId: string, message: string, signer: string) => Promise<CosmosSignMessageResponse>;
+  verifyMessage: (
+    chainId: string,
+    message: string,
+    signer: string,
+    signature: string,
+    publicKey: string
+  ) => Promise<boolean>;
+  getSupportedChainIds: () => Promise<string[]>;
+  sendTransaction?: (
     chainId: string,
     txBytes: Uint8Array | string,
     mode?: number
   ) => Promise<CosmosSendTransactionResponse>;
-  getSupportedChainIDs?: () => Promise<string[]>;
 }
 
 export interface CosmosEvents {
