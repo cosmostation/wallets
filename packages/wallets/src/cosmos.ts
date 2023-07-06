@@ -103,6 +103,7 @@ export interface CosmosEvents {
 }
 
 export interface CosmosWallet {
+  id: string;
   name: string;
   logo: string;
   methods: CosmosMethods;
@@ -119,7 +120,7 @@ export const registCosmosWallet = (wallet: CosmosWallet) => {
   }
 
   if (!window.__cosmosWallets.some((w) => w.name === wallet.name)) {
-    window.__cosmosWallets.push(wallet);
+    window.__cosmosWallets.push({ id: crypto.randomUUID(), ...wallet });
     window.dispatchEvent(new CustomEvent('__cosmosWallets'));
   }
 };
