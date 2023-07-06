@@ -34,8 +34,8 @@ export default function useCosmosWallets() {
   }, [walletHandler]);
 
   useEffect(() => {
-    const cosmosWallets = getCosmosWallets();
-    setCosmosWallets(cosmosWallets);
+    const wallets = getCosmosWallets();
+    setCosmosWallets(wallets);
 
     const savedWalletName = localStorage.getItem('__cosmosWallets');
     const wallet = cosmosWallets.find((w) => w.name === savedWalletName);
