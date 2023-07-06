@@ -8,14 +8,18 @@ export default function useCosmosAccount(chainID: string) {
   const [account, setAccount] = useState<CosmosRequestAccountResponse>();
 
   const requestAccount = useCallback(async () => {
-    if (currentWallet) {
-      const supportedChainIDs = await currentWallet.methods.getSupportedChainIDs();
-      const responseAccount = supportedChainIDs.includes(chainID)
-        ? await currentWallet.methods.requestAccount(chainID)
-        : undefined;
+    try {
+      if (currentWallet) {
+        const supportedChainIDs = await currentWallet.methods.getSupportedChainIDs();
+        const responseAccount = supportedChainIDs.includes(chainID)
+          ? await currentWallet.methods.requestAccount(chainID)
+          : undefined;
 
-      setAccount(responseAccount);
-    } else {
+        setAccount(responseAccount);
+      } else {
+        setAccount(undefined);
+      }
+    } catch {
       setAccount(undefined);
     }
   }, [chainID, currentWallet]);
