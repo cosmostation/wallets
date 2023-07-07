@@ -6,6 +6,7 @@ export default function useCosmosAccount(chainId: string) {
   const { currentWallet } = useCosmosWallets();
 
   const [account, setAccount] = useState<CosmosRequestAccountResponse>();
+  const [error, setError] = useState<string | undefined>();
 
   const requestAccount = useCallback(async () => {
     try {
@@ -16,12 +17,14 @@ export default function useCosmosAccount(chainId: string) {
           : undefined;
 
         setAccount(responseAccount);
+        setError(undefined);
       } else {
         setAccount(undefined);
+        setError('No wallet selected');
       }
     } catch (e) {
       setAccount(undefined);
-      console.info('@cosmostation/use-wallets', e.message);
+      setError(e.message);
     }
   }, [chainId, currentWallet]);
 
@@ -29,5 +32,5 @@ export default function useCosmosAccount(chainId: string) {
     requestAccount();
   }, [requestAccount]);
 
-  return { account, reRequest: requestAccount };
+  return { data: account, error, mutate: requestAccount };
 }

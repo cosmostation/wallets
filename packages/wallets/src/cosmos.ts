@@ -87,7 +87,6 @@ type CosmosEventTypeKeys = keyof CosmosEventTypes;
 
 export interface CosmosMethods {
   requestAccount: (chainId: string) => Promise<CosmosRequestAccountResponse>;
-
   signAmino: (
     chainId: string,
     document: CosmosSignAminoDoc,
