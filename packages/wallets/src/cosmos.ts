@@ -128,6 +128,70 @@ export interface CosmosWallet {
 
 export type RegistCosmosWallet = Omit<CosmosWallet, 'id'>;
 
+export interface Amount {
+  denom: string;
+
+  amount: number;
+}
+
+export interface Fee {
+  amount: Amount[];
+
+  gas_limit: number;
+
+  payer?: string;
+
+  granter?: string;
+}
+
+export interface Message {
+  type_url: string;
+  value?: unknown;
+}
+
+export interface PubKey {
+  type_url: string;
+
+  key: string;
+}
+
+export interface Proto {
+  chain_id: string;
+
+  signer: string;
+  pub_key: PubKey;
+
+  messages: Message[];
+
+  memo?: string;
+
+  fee?: Fee;
+
+  sequence?: number;
+
+  lcd_url?: string;
+
+  fee_denom?: string;
+
+  gas_rate?: number;
+
+  payer?: string;
+
+  granter?: string;
+}
+
+export interface ProtoResponse {
+  auth_info_bytes: string;
+  body_bytes: string;
+}
+
+export interface ProtoBytes {
+  auth_info_bytes: string | Uint8Array;
+  body_bytes: string | Uint8Array;
+
+  signature: string;
+}
+
 export const registCosmosWallet = (wallet: RegistCosmosWallet) => {
   if (window.__cosmosWallets == undefined) {
     window.__cosmosWallets = [];
@@ -144,3 +208,32 @@ export const registCosmosWallet = (wallet: RegistCosmosWallet) => {
 };
 
 export const getCosmosWallets = () => window.__cosmosWallets || [];
+
+export const getTxProto = async (params: Proto) => {
+  const postResponse = await fetch('http://localhost:4000/proto', { method: 'POST', body: JSON.stringify(params) });
+
+  const response = await postResponse.json();
+
+  const auth_info_bytes = new Uint8Array(Buffer.from(response.auth_info_bytes, 'hex'));
+  const body_bytes = new Uint8Array(Buffer.from(response.body_bytes, 'hex'));
+
+  return { auth_info_bytes, body_bytes };
+};
+
+export const getTxProtoBytes = async (params: ProtoBytes): Promise<string> => {
+  const auth_info_bytes =
+    params.auth_info_bytes instanceof Uint8Array
+      ? Buffer.from(params.auth_info_bytes).toString('hex')
+      : params.auth_info_bytes;
+
+  const body_bytes =
+    params.body_bytes instanceof Uint8Array ? Buffer.from(params.body_bytes).toString('hex') : params.body_bytes;
+  const postResponse = await fetch('http://localhost:4000/proto/bytes', {
+    method: 'POST',
+    body: JSON.stringify({ ...params, auth_info_bytes, body_bytes }),
+  });
+
+  const response = await postResponse.json();
+
+  return response;
+};
