@@ -5,7 +5,7 @@ import useCosmosWallets from './useCosmosWallets';
 export default function useCosmosAccount(chainId: string) {
   const { currentWallet } = useCosmosWallets();
 
-  const [account, setAccount] = useState<CosmosRequestAccountResponse>();
+  const [account, setAccount] = useState<CosmosRequestAccountResponse | undefined>();
   const [error, setError] = useState<string | undefined>();
 
   const requestAccount = useCallback(async () => {
