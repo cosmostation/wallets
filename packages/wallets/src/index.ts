@@ -12,7 +12,8 @@ import {
   CosmosSignDirectDoc,
   CosmosSignDirectResponse,
   RegistCosmosWallet,
-  ProtoResponse,
+  TxProtoResponse,
+  TxProtoBytesResponse,
   getTxProto,
   getTxProtoBytes,
 } from './cosmos';
@@ -33,5 +34,6 @@ export {
   CosmosSignDirectDoc,
   CosmosSignDirectResponse,
   RegistCosmosWallet,
-  ProtoResponse,
+  TxProtoResponse,
+  TxProtoBytesResponse,
 };

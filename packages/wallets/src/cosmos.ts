@@ -149,7 +149,7 @@ export interface Message {
 }
 
 export interface PubKey {
-  type_url: string;
+  type_url?: string;
 
   key: string;
 }
@@ -179,9 +179,9 @@ export interface Proto {
   granter?: string;
 }
 
-export interface ProtoResponse {
-  auth_info_bytes: string;
-  body_bytes: string;
+export interface TxProtoResponse {
+  auth_info_bytes: Uint8Array;
+  body_bytes: Uint8Array;
 }
 
 export interface ProtoBytes {
@@ -190,6 +190,8 @@ export interface ProtoBytes {
 
   signature: string;
 }
+
+export type TxProtoBytesResponse = string;
 
 export const registCosmosWallet = (wallet: RegistCosmosWallet) => {
   if (window.__cosmosWallets == undefined) {
@@ -208,7 +210,7 @@ export const registCosmosWallet = (wallet: RegistCosmosWallet) => {
 
 export const getCosmosWallets = () => window.__cosmosWallets || [];
 
-export const getTxProto = async (params: Proto) => {
+export const getTxProto = async (params: Proto): Promise<TxProtoResponse> => {
   const postResponse = await fetch('http://localhost:4000/proto', { method: 'POST', body: JSON.stringify(params) });
 
   const response = await postResponse.json();
@@ -219,7 +221,7 @@ export const getTxProto = async (params: Proto) => {
   return { auth_info_bytes, body_bytes };
 };
 
-export const getTxProtoBytes = async (params: ProtoBytes): Promise<string> => {
+export const getTxProtoBytes = async (params: ProtoBytes): Promise<TxProtoBytesResponse> => {
   const auth_info_bytes =
     params.auth_info_bytes instanceof Uint8Array
       ? Buffer.from(params.auth_info_bytes).toString('hex')
