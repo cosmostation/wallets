@@ -20,9 +20,8 @@ export interface CosmosSignAminoDoc {
 
 export interface CosmosSignDirectDoc {
   chain_id: string;
-  account_number: string;
-  body_bytes: Uint8Array;
-  auth_info_bytes: Uint8Array;
+  body_bytes: string | Uint8Array; // hex string or Uint8Array
+  auth_info_bytes: string | Uint8Array; // hex string or Uint8Array
 }
 
 export interface CosmosRequestAccountResponse {
