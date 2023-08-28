@@ -211,7 +211,13 @@ export const registCosmosWallet = (wallet: RegistCosmosWallet) => {
 export const getCosmosWallets = () => window.__cosmosWallets || [];
 
 export const getTxProto = async (params: Proto): Promise<TxProtoResponse> => {
-  const postResponse = await fetch('http://localhost:4000/proto', { method: 'POST', body: JSON.stringify(params) });
+  const postResponse = await fetch('http://localhost:4000/proto', {
+    method: 'POST',
+    body: JSON.stringify(params),
+    headers: {
+      'Content-Type': 'application/json',
+    },
+  });
 
   const response = await postResponse.json();
 
@@ -232,6 +238,9 @@ export const getTxProtoBytes = async (params: ProtoBytes): Promise<TxProtoBytesR
   const postResponse = await fetch('http://localhost:4000/proto/bytes', {
     method: 'POST',
     body: JSON.stringify({ ...params, auth_info_bytes, body_bytes }),
+    headers: {
+      'Content-Type': 'application/json',
+    },
   });
 
   const response = await postResponse.json();
