@@ -215,8 +215,8 @@ export const getTxProto = async (params: Proto): Promise<TxProtoResponse> => {
 
   const response = await postResponse.json();
 
-  const auth_info_bytes = new Uint8Array(Buffer.from(response.auth_info_bytes, 'hex'));
-  const body_bytes = new Uint8Array(Buffer.from(response.body_bytes, 'hex'));
+  const auth_info_bytes = toUint8Array(response.auth_info_bytes);
+  const body_bytes = toUint8Array(response.body_bytes);
 
   return { auth_info_bytes, body_bytes };
 };
@@ -238,3 +238,9 @@ export const getTxProtoBytes = async (params: ProtoBytes): Promise<TxProtoBytesR
 
   return response;
 };
+
+export const toUint8Array = (hexString: string) =>
+  Uint8Array.from(hexString.match(/.{1,2}/g).map((byte) => parseInt(byte, 16)));
+
+export const toHexString = (bytes: Uint8Array) =>
+  bytes.reduce((str, byte) => str + byte.toString(16).padStart(2, '0'), '');

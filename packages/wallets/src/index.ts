@@ -16,6 +16,8 @@ import {
   TxProtoBytesResponse,
   getTxProto,
   getTxProtoBytes,
+  toHexString,
+  toUint8Array,
 } from './cosmos';
 
 export {
@@ -36,4 +38,6 @@ export {
   RegistCosmosWallet,
   TxProtoResponse,
   TxProtoBytesResponse,
+  toHexString,
+  toUint8Array,
 };
