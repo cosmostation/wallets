@@ -19,37 +19,28 @@ export interface CosmosSignAminoDoc {
 }
 
 export interface CosmosSignDirectDoc {
-  chain_id: string;
   body_bytes: string | Uint8Array; // hex string or Uint8Array
   auth_info_bytes: string | Uint8Array; // hex string or Uint8Array
 }
 
 export interface CosmosRequestAccountResponse {
   address: string;
-  publicKey: {
+  public_key: {
     type: CosmosPublicKeyType;
     value: string;
   };
   name?: string;
-  isLedger?: boolean;
+  is_ledger?: boolean;
 }
 
 export interface CosmosSignAminoResponse {
-  publicKey: {
-    type: CosmosPublicKeyType;
-    value: string;
-  };
   signature: string;
-  signedDoc: any;
+  signed_doc: any;
 }
 
 export interface CosmosSignDirectResponse {
-  publicKey: {
-    type: CosmosPublicKeyType;
-    value: string;
-  };
   signature: string;
-  signedDoc: any;
+  signed_doc: TxProtoResponse;
 }
 
 export interface CosmosSendTransactionResponse {
@@ -71,10 +62,6 @@ export interface CosmosSendTransactionResponse {
 }
 
 export interface CosmosSignMessageResponse {
-  publicKey: {
-    type: CosmosPublicKeyType;
-    value: string;
-  };
   signature: string;
 }
 
@@ -87,29 +74,29 @@ type CosmosEventTypeKeys = keyof CosmosEventTypes;
 export interface CosmosMethods {
   requestAccount: (chainId: string) => Promise<CosmosRequestAccountResponse>;
   signAmino: (
-    chainId: string,
+    chain_id: string,
     document: CosmosSignAminoDoc,
-    options?: { signer?: string; editMode?: { fee?: boolean; memo?: boolean } }
+    options?: { signer?: string; edit_mode?: { fee?: boolean; memo?: boolean } }
   ) => Promise<CosmosSignAminoResponse>;
   signDirect: (
-    chainId: string,
+    chain_id: string,
     document: CosmosSignDirectDoc,
-    options?: { signer?: string; editMode?: { fee?: boolean; memo?: boolean } }
+    options?: { signer?: string; edit_mode?: { fee?: boolean; memo?: boolean } }
   ) => Promise<CosmosSignDirectResponse>;
+  sendTransaction: (
+    chain_id: string,
+    tx_bytes: Uint8Array | string,
+    mode?: number
+  ) => Promise<CosmosSendTransactionResponse>;
   getSupportedChainIds: () => Promise<string[]>;
   signMessage?: (chainId: string, message: string, signer: string) => Promise<CosmosSignMessageResponse>;
   verifyMessage?: (
-    chainId: string,
+    chain_id: string,
     message: string,
     signer: string,
     signature: string,
-    publicKey: string
+    public_key: string
   ) => Promise<boolean>;
-  sendTransaction?: (
-    chainId: string,
-    txBytes: Uint8Array | string,
-    mode?: number
-  ) => Promise<CosmosSendTransactionResponse>;
 }
 
 export interface CosmosEvents {
@@ -148,7 +135,7 @@ export interface Message {
   value?: unknown;
 }
 
-export interface PubKey {
+export interface PublicKey {
   type_url?: string;
 
   key: string;
@@ -158,7 +145,7 @@ export interface Proto {
   chain_id: string;
 
   signer: string;
-  pub_key: PubKey;
+  public_key: PublicKey;
 
   messages: Message[];
 
@@ -229,12 +216,12 @@ export const getTxProto = async (params: Proto): Promise<TxProtoResponse> => {
 
 export const getTxProtoBytes = async (params: ProtoBytes): Promise<TxProtoBytesResponse> => {
   const auth_info_bytes =
-    params.auth_info_bytes instanceof Uint8Array
-      ? Buffer.from(params.auth_info_bytes).toString('hex')
-      : params.auth_info_bytes;
+    typeof params.auth_info_bytes === 'string'
+      ? toUint8Array(params.auth_info_bytes)
+      : new Uint8Array(params.auth_info_bytes);
 
   const body_bytes =
-    params.body_bytes instanceof Uint8Array ? Buffer.from(params.body_bytes).toString('hex') : params.body_bytes;
+    typeof params.body_bytes === 'string' ? toUint8Array(params.body_bytes) : new Uint8Array(params.body_bytes);
   const postResponse = await fetch('http://localhost:4000/proto/bytes', {
     method: 'POST',
     body: JSON.stringify({ ...params, auth_info_bytes, body_bytes }),
@@ -253,3 +240,14 @@ export const toUint8Array = (hexString: string) =>
 
 export const toHexString = (bytes: Uint8Array) =>
   bytes.reduce((str, byte) => str + byte.toString(16).padStart(2, '0'), '');
+
+export const getPublicKeyTypeURL = (type: string) => {
+  switch (type) {
+    case 'secp256k1':
+      return '/cosmos.crypto.secp256k1.PublicKey';
+    case 'ethsecp256k1':
+      return '/ethermint.crypto.v1.ethsecp256k1.PublicKey';
+    default:
+      return type;
+  }
+};

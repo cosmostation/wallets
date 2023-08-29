@@ -18,6 +18,7 @@ import {
   getTxProtoBytes,
   toHexString,
   toUint8Array,
+  getPublicKeyTypeURL,
 } from './cosmos';
 
 export {
@@ -40,4 +41,5 @@ export {
   TxProtoBytesResponse,
   toHexString,
   toUint8Array,
+  getPublicKeyTypeURL,
 };
