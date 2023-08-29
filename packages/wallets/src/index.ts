@@ -20,6 +20,12 @@ import {
   toUint8Array,
   getPublicKeyTypeURL,
   SignOptions,
+  CosmosSignedDoc,
+  Amount,
+  CosmosSignMessageResponse,
+  Fee,
+  Message,
+  PublicKey,
   Proto,
   ProtoBytes,
 } from './cosmos';
@@ -48,4 +54,10 @@ export {
   SignOptions,
   Proto,
   ProtoBytes,
+  CosmosSignedDoc,
+  Amount,
+  CosmosSignMessageResponse,
+  Fee,
+  Message,
+  PublicKey,
 };

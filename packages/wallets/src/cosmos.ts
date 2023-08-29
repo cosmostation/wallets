@@ -40,9 +40,13 @@ export interface CosmosSignAminoResponse {
   signed_doc: any;
 }
 
+export interface CosmosSignedDoc {
+  auth_info_bytes: Uint8Array;
+  body_bytes: Uint8Array;
+}
 export interface CosmosSignDirectResponse {
   signature: string;
-  signed_doc: ProtoResponse;
+  signed_doc: CosmosSignedDoc;
 }
 
 export interface CosmosSendTransactionResponse {
