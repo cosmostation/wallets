@@ -1,5 +1,5 @@
 import useCosmosWallets from './useCosmosWallets';
-import useCosmosAccount from './useCosmosAccount';
+import useCosmosAccount, { SignAndSendTransactionProps } from './useCosmosAccount';
 import CosmosProvider from './CosmosProvider';
 
-export { useCosmosWallets, useCosmosAccount, CosmosProvider };
+export { useCosmosWallets, useCosmosAccount, CosmosProvider, SignAndSendTransactionProps };
