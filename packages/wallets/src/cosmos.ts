@@ -219,6 +219,11 @@ export const getTxProto = async (params: Proto): Promise<ProtoResponse> => {
     },
   });
 
+  if (!postResponse.ok) {
+    const error = await postResponse.json();
+    throw new Error(Array.isArray(error.message) ? error.message.join('\n') : error.message);
+  }
+
   const response = await postResponse.json();
 
   const auth_info_bytes = toUint8Array(response.auth_info_bytes);
@@ -240,6 +245,11 @@ export const getTxProtoBytes = async (params: ProtoBytes): Promise<ProtoBytesRes
       'Content-Type': 'application/json',
     },
   });
+
+  if (!postResponse.ok) {
+    const error = await postResponse.json();
+    throw new Error(Array.isArray(error.message) ? error.message.join('\n') : error.message);
+  }
 
   const response = await postResponse.text();
 
