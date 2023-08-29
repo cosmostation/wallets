@@ -40,7 +40,7 @@ export interface CosmosSignAminoResponse {
 
 export interface CosmosSignDirectResponse {
   signature: string;
-  signed_doc: TxProtoResponse;
+  signed_doc: ProtoResponse;
 }
 
 export interface CosmosSendTransactionResponse {
@@ -171,7 +171,7 @@ export interface Proto {
   granter?: string;
 }
 
-export interface TxProtoResponse {
+export interface ProtoResponse {
   auth_info_bytes: Uint8Array;
   body_bytes: Uint8Array;
 }
@@ -183,7 +183,7 @@ export interface ProtoBytes {
   signature: string;
 }
 
-export type TxProtoBytesResponse = string;
+export type ProtoBytesResponse = string;
 
 export const registCosmosWallet = (wallet: RegistCosmosWallet) => {
   if (window.__cosmosWallets == undefined) {
@@ -202,7 +202,7 @@ export const registCosmosWallet = (wallet: RegistCosmosWallet) => {
 
 export const getCosmosWallets = () => window.__cosmosWallets || [];
 
-export const getTxProto = async (params: Proto): Promise<TxProtoResponse> => {
+export const getTxProto = async (params: Proto): Promise<ProtoResponse> => {
   const postResponse = await fetch('http://localhost:4000/proto', {
     method: 'POST',
     body: JSON.stringify(params),
@@ -219,7 +219,7 @@ export const getTxProto = async (params: Proto): Promise<TxProtoResponse> => {
   return { auth_info_bytes, body_bytes };
 };
 
-export const getTxProtoBytes = async (params: ProtoBytes): Promise<TxProtoBytesResponse> => {
+export const getTxProtoBytes = async (params: ProtoBytes): Promise<ProtoBytesResponse> => {
   const auth_info_bytes =
     typeof params.auth_info_bytes === 'string'
       ? toUint8Array(params.auth_info_bytes)

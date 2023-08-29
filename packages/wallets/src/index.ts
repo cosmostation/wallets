@@ -12,14 +12,16 @@ import {
   CosmosSignDirectDoc,
   CosmosSignDirectResponse,
   RegistCosmosWallet,
-  TxProtoResponse,
-  TxProtoBytesResponse,
+  ProtoResponse,
+  ProtoBytesResponse,
   getTxProto,
   getTxProtoBytes,
   toHexString,
   toUint8Array,
   getPublicKeyTypeURL,
   SignOptions,
+  Proto,
+  ProtoBytes,
 } from './cosmos';
 
 export {
@@ -38,10 +40,12 @@ export {
   CosmosSignDirectDoc,
   CosmosSignDirectResponse,
   RegistCosmosWallet,
-  TxProtoResponse,
-  TxProtoBytesResponse,
+  ProtoResponse,
+  ProtoBytesResponse,
   toHexString,
   toUint8Array,
   getPublicKeyTypeURL,
   SignOptions,
+  Proto,
+  ProtoBytes,
 };
