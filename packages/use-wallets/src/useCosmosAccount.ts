@@ -45,11 +45,11 @@ export default function useCosmosAccount(chainId: string) {
         return methods.sendTransaction(chainId, tx_bytes, mode);
       };
 
-      const signAmino = (document: CosmosSignAminoDoc, options: SignOptions) => {
+      const signAmino = (document: CosmosSignAminoDoc, options?: SignOptions) => {
         return methods.signAmino(chainId, document, options);
       };
 
-      const signDirect = (document: CosmosSignDirectDoc, options: SignOptions) => {
+      const signDirect = (document: CosmosSignDirectDoc, options?: SignOptions) => {
         if (account.is_ledger) {
           throw new Error('Ledger does not support signAndSendTransaction');
         }
@@ -57,7 +57,7 @@ export default function useCosmosAccount(chainId: string) {
         return methods.signDirect(chainId, document, options);
       };
 
-      const signAndSendTransaction = async (props: SignAndSendTransactionProps, options: SignOptions) => {
+      const signAndSendTransaction = async (props: SignAndSendTransactionProps, options?: SignOptions) => {
         if (account.is_ledger) {
           throw new Error('Ledger does not support signAndSendTransaction');
         }
