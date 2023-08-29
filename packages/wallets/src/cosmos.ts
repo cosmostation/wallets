@@ -19,6 +19,8 @@ export interface CosmosSignAminoDoc {
 }
 
 export interface CosmosSignDirectDoc {
+  chain_id: string;
+  account_number: string;
   body_bytes: string | Uint8Array; // hex string or Uint8Array
   auth_info_bytes: string | Uint8Array; // hex string or Uint8Array
 }
@@ -174,6 +176,8 @@ export interface Proto {
 export interface ProtoResponse {
   auth_info_bytes: Uint8Array;
   body_bytes: Uint8Array;
+  chain_id: string;
+  account_number: string;
 }
 
 export interface ProtoBytes {
@@ -216,7 +220,7 @@ export const getTxProto = async (params: Proto): Promise<ProtoResponse> => {
   const auth_info_bytes = toUint8Array(response.auth_info_bytes);
   const body_bytes = toUint8Array(response.body_bytes);
 
-  return { auth_info_bytes, body_bytes };
+  return { ...response, auth_info_bytes, body_bytes };
 };
 
 export const getTxProtoBytes = async (params: ProtoBytes): Promise<ProtoBytesResponse> => {
