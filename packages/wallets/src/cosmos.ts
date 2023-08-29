@@ -65,6 +65,11 @@ export interface CosmosSignMessageResponse {
   signature: string;
 }
 
+export interface SignOptions {
+  signer?: string;
+  edit_mode?: { fee?: boolean; memo?: boolean };
+}
+
 type CosmosEventTypes = {
   AccountChanged: () => void;
 };
@@ -76,12 +81,12 @@ export interface CosmosMethods {
   signAmino: (
     chain_id: string,
     document: CosmosSignAminoDoc,
-    options?: { signer?: string; edit_mode?: { fee?: boolean; memo?: boolean } }
+    options?: SignOptions
   ) => Promise<CosmosSignAminoResponse>;
   signDirect: (
     chain_id: string,
     document: CosmosSignDirectDoc,
-    options?: { signer?: string; edit_mode?: { fee?: boolean; memo?: boolean } }
+    options?: SignOptions
   ) => Promise<CosmosSignDirectResponse>;
   sendTransaction: (
     chain_id: string,

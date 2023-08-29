@@ -19,6 +19,7 @@ import {
   toHexString,
   toUint8Array,
   getPublicKeyTypeURL,
+  SignOptions,
 } from './cosmos';
 
 export {
@@ -42,4 +43,5 @@ export {
   toHexString,
   toUint8Array,
   getPublicKeyTypeURL,
+  SignOptions,
 };
