@@ -12,6 +12,8 @@ import useCosmosWallets from './useCosmosWallets';
 
 export type SignAndSendTransactionProps = Omit<Proto, 'chain_id' | 'signer' | 'public_key'>;
 
+export type SignDirectDocument = Omit<CosmosSignDirectDoc, 'chain_id'>;
+
 export default function useCosmosAccount(chainId: string) {
   const { currentWallet } = useCosmosWallets();
 
@@ -49,12 +51,12 @@ export default function useCosmosAccount(chainId: string) {
         return methods.signAmino(chainId, document, options);
       };
 
-      const signDirect = (document: CosmosSignDirectDoc, options?: SignOptions) => {
+      const signDirect = (document: SignDirectDocument, options?: SignOptions) => {
         if (account.is_ledger) {
           throw new Error('Ledger does not support signAndSendTransaction');
         }
 
-        return methods.signDirect(chainId, document, options);
+        return methods.signDirect(chainId, { chain_id: chainId, ...document }, options);
       };
 
       const signAndSendTransaction = async (props: SignAndSendTransactionProps, options?: SignOptions) => {
@@ -70,7 +72,11 @@ export default function useCosmosAccount(chainId: string) {
         });
 
         const signDirectResponse = await signDirect(
-          { auth_info_bytes: proto.auth_info_bytes, body_bytes: proto.body_bytes },
+          {
+            auth_info_bytes: proto.auth_info_bytes,
+            body_bytes: proto.body_bytes,
+            account_number: proto.account_number,
+          },
           options
         );
 
