@@ -221,12 +221,10 @@ export const getTxProto = async (params: Proto): Promise<ProtoResponse> => {
 
 export const getTxProtoBytes = async (params: ProtoBytes): Promise<ProtoBytesResponse> => {
   const auth_info_bytes =
-    typeof params.auth_info_bytes === 'string'
-      ? toUint8Array(params.auth_info_bytes)
-      : new Uint8Array(params.auth_info_bytes);
+    typeof params.auth_info_bytes === 'string' ? params.auth_info_bytes : toHexString(params.auth_info_bytes);
 
-  const body_bytes =
-    typeof params.body_bytes === 'string' ? toUint8Array(params.body_bytes) : new Uint8Array(params.body_bytes);
+  const body_bytes = typeof params.body_bytes === 'string' ? params.body_bytes : toHexString(params.body_bytes);
+
   const postResponse = await fetch('http://localhost:4000/proto/bytes', {
     method: 'POST',
     body: JSON.stringify({ ...params, auth_info_bytes, body_bytes }),
