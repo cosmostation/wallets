@@ -113,7 +113,7 @@ export default function useCosmosAccount(chainId: string) {
     return () => {
       currentWallet?.events.off('AccountChanged', requestAccount);
     };
-  }, [currentWallet.events, requestAccount]);
+  }, [currentWallet?.events, requestAccount]);
 
   const returnData = useMemo(() => {
     if (account) {
