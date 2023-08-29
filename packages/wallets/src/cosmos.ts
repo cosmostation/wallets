@@ -233,7 +233,7 @@ export const getTxProtoBytes = async (params: ProtoBytes): Promise<ProtoBytesRes
     },
   });
 
-  const response = await postResponse.json();
+  const response = await postResponse.text();
 
   return response;
 };
