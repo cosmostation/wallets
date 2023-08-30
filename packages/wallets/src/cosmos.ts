@@ -204,9 +204,7 @@ export const registCosmosWallet = (wallet: RegistCosmosWallet) => {
 
   if (!window.__cosmosWallets.some((w) => w.name === wallet.name)) {
     window.__cosmosWallets.push({ id: crypto.randomUUID(), ...wallet });
-    setTimeout(() => {
-      window.dispatchEvent(new CustomEvent('__cosmosWallets'));
-    }, 500);
+    window.dispatchEvent(new CustomEvent('__cosmosWallets'));
   }
 };
 
