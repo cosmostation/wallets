@@ -31,5 +31,9 @@ export default function useCosmosWallets() {
     };
   }, [walletHandler]);
 
+  useEffect(() => {
+    window.dispatchEvent(new CustomEvent('__cosmosWallets'));
+  }, []);
+
   return { cosmosWallets, currentWallet, selectWallet };
 }
