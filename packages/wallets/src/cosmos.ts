@@ -211,7 +211,7 @@ export const registCosmosWallet = (wallet: RegistCosmosWallet) => {
 export const getCosmosWallets = () => window.__cosmosWallets || [];
 
 export const getTxProto = async (params: Proto): Promise<ProtoResponse> => {
-  const postResponse = await fetch('http://localhost:4000/proto', {
+  const postResponse = await fetch('https://proto.mintscan.io/proto', {
     method: 'POST',
     body: JSON.stringify(params),
     headers: {
@@ -238,7 +238,7 @@ export const getTxProtoBytes = async (params: ProtoBytes): Promise<ProtoBytesRes
 
   const body_bytes = typeof params.body_bytes === 'string' ? params.body_bytes : toHexString(params.body_bytes);
 
-  const postResponse = await fetch('http://localhost:4000/proto/bytes', {
+  const postResponse = await fetch('https://proto.mintscan.io/proto/bytes', {
     method: 'POST',
     body: JSON.stringify({ ...params, auth_info_bytes, body_bytes }),
     headers: {
