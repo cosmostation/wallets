@@ -61,23 +61,9 @@ type Cosmos = {
     props: CosmosSignAndSendTransactionProps,
     options?: CosmosSignOptions
   ) => Promise<CosmosSendTransactionResponse>;
+  signMessage: (message: string) => Promise<CosmosSignMessageResponse>;
+  verifyMessage: (message: string, signature: string) => Promise<boolean>;
 };
-
-export function on<T extends CosmosEventTypeKeys>(type: T, listener: CosmosEventTypes[T]) {
-  if (type === 'AccountChanged') {
-    window.addEventListener('cosmostation_keystorechange', listener);
-  }
-}
-
-export function off<T extends CosmosEventTypeKeys>(type: T, listener: CosmosEventTypes[T]) {
-  if (type === 'AccountChanged') {
-    window.removeEventListener('cosmostation_keystorechange', listener);
-  }
-}
-
-export function addCosmosChain(props: CosAddChainParams): Promise<boolean> {
-  return request({ method: 'cos_addChain', params: props });
-}
 
 export async function cosmos(chainId: string): Promise<Cosmos> {
   const chainID = chainId;
@@ -263,6 +249,10 @@ export async function signMessage(chainId: string, message: string): Promise<Cos
   return response;
 }
 
+export function addCosmosChain(props: CosAddChainParams): Promise<boolean> {
+  return request({ method: 'cos_addChain', params: props });
+}
+
 export async function verifyMessage(chainId: string, message: string, signature: string): Promise<boolean> {
   const account = await requestAccount(chainId);
 
@@ -277,6 +267,18 @@ export async function verifyMessage(chainId: string, message: string, signature:
   });
 
   return response;
+}
+
+export function on<T extends CosmosEventTypeKeys>(type: T, listener: CosmosEventTypes[T]) {
+  if (type === 'AccountChanged') {
+    window.addEventListener('cosmostation_keystorechange', listener);
+  }
+}
+
+export function off<T extends CosmosEventTypeKeys>(type: T, listener: CosmosEventTypes[T]) {
+  if (type === 'AccountChanged') {
+    window.removeEventListener('cosmostation_keystorechange', listener);
+  }
 }
 
 async function request({ method, params }: { method: string; params?: unknown }) {

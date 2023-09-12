@@ -7,6 +7,8 @@ import {
   requestAccount,
   getSupportedChainIds,
   addCosmosChain,
+  signMessage,
+  verifyMessage,
   on,
   off,
   CosmosSignAndSendTransactionProps,
@@ -19,6 +21,7 @@ import {
   CosmosSignDirectResponse,
   CosmosSignAminoResponse,
   CosmosSendTransactionResponse,
+  CosmosSignMessageResponse,
   toUint8Array,
   toHexString,
 } from '@cosmostation/wallets';
@@ -33,6 +36,8 @@ const cosmosFunctions = {
   requestAccount,
   getSupportedChainIds,
   addCosmosChain,
+  signMessage,
+  verifyMessage,
 };
 
 export {
@@ -46,6 +51,7 @@ export {
   CosmosSignDirectResponse,
   CosmosSignAminoResponse,
   CosmosSendTransactionResponse,
+  CosmosSignMessageResponse,
   toUint8Array,
   toHexString,
 };
