@@ -101,7 +101,7 @@ export async function cosmos(chainId: string): Promise<Cosmos> {
     on,
     off,
   };
-  return;
+  return cosmosFunctions;
 }
 
 export async function requestAccount(chainId: string): Promise<CosmosRequestAccountResponse> {
