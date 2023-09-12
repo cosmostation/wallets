@@ -58,7 +58,7 @@ type Cosmos = {
   sendTransaction: (txBytes: string, mode?: number) => Promise<CosmosSendTransactionResponse>;
   signAndSendTransaction: (
     props: CosmosSignAndSendTransactionProps,
-    options: CosmosSignOptions
+    options?: CosmosSignOptions
   ) => Promise<CosmosSendTransactionResponse>;
 };
 
