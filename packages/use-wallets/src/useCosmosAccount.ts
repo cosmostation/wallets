@@ -2,18 +2,18 @@ import {
   CosmosRequestAccountResponse,
   CosmosSignAminoDoc,
   CosmosSignDirectDoc,
-  SignOptions,
-  Proto,
-  getTxProto,
-  getTxProtoBytes,
+  CosmosSignOptions,
+  CosmosProto,
+  getCosmosTxProto,
+  getCosmosTxProtoBytes,
 } from '@cosmostation/wallets';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import useCosmosWallets from './useCosmosWallets';
 
-export type SignAndSendTransactionProps = Omit<Proto, 'chain_id' | 'signer' | 'public_key'>;
+export type CosmosSignAndSendTransactionProps = Omit<CosmosProto, 'chain_id' | 'signer' | 'public_key'>;
 
-export type SignDirectDocument = Omit<CosmosSignDirectDoc, 'chain_id'>;
-export type SignAminoDocument = Omit<CosmosSignAminoDoc, 'chain_id'>;
+export type CosmosSignDirectDocument = Omit<CosmosSignDirectDoc, 'chain_id'>;
+export type CosmosSignAminoDocument = Omit<CosmosSignAminoDoc, 'chain_id'>;
 
 export default function useCosmosAccount(chainId: string) {
   const { currentWallet } = useCosmosWallets();
@@ -48,11 +48,11 @@ export default function useCosmosAccount(chainId: string) {
         return methods.sendTransaction(chainId, tx_bytes, mode);
       };
 
-      const signAmino = (document: CosmosSignAminoDoc, options?: SignOptions) => {
+      const signAmino = (document: CosmosSignAminoDoc, options?: CosmosSignOptions) => {
         return methods.signAmino(chainId, { ...document, chain_id: chainId }, options);
       };
 
-      const signDirect = (document: SignDirectDocument, options?: SignOptions) => {
+      const signDirect = (document: CosmosSignDirectDocument, options?: CosmosSignOptions) => {
         if (account.is_ledger) {
           throw new Error('Ledger does not support signAndSendTransaction');
         }
@@ -60,12 +60,12 @@ export default function useCosmosAccount(chainId: string) {
         return methods.signDirect(chainId, { ...document, chain_id: chainId }, options);
       };
 
-      const signAndSendTransaction = async (props: SignAndSendTransactionProps, options?: SignOptions) => {
+      const signAndSendTransaction = async (props: CosmosSignAndSendTransactionProps, options?: CosmosSignOptions) => {
         if (account.is_ledger) {
           throw new Error('Ledger does not support signAndSendTransaction');
         }
 
-        const proto = await getTxProto({
+        const CosmosProto = await getCosmosTxProto({
           chain_id: chainId,
           signer: account.address,
           public_key: { type_url: account.public_key.type, key: account.public_key.value },
@@ -74,14 +74,14 @@ export default function useCosmosAccount(chainId: string) {
 
         const signDirectResponse = await signDirect(
           {
-            auth_info_bytes: proto.auth_info_bytes,
-            body_bytes: proto.body_bytes,
-            account_number: proto.account_number,
+            auth_info_bytes: CosmosProto.auth_info_bytes,
+            body_bytes: CosmosProto.body_bytes,
+            account_number: CosmosProto.account_number,
           },
           options
         );
 
-        const tx_bytes = await getTxProtoBytes({
+        const tx_bytes = await getCosmosTxProtoBytes({
           signature: signDirectResponse.signature,
           ...signDirectResponse.signed_doc,
         });
