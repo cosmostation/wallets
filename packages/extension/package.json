@@ -1,0 +1,56 @@
+{
+  "name": "@cosmostation/extension",
+  "version": "0.0.0",
+  "description": "Cosmostation Extension Wallet",
+  "source": "src/index.ts",
+  "main": "dist/index.js",
+  "module": "dist/index.module.js",
+  "umd:main": "dist/index.umd.js",
+  "exports": {
+    "types": "./dist/index.d.ts",
+    "require": "./dist/index.js",
+    "default": "./dist/index.modern.mjs"
+  },
+  "scripts": {
+    "build": "rm -rf ./dist/*; microbundle build --entry src/index.ts --name @cosmostation/extension --tsconfig tsconfig.json; rm -f cosmostation-extension.tgz; yarn pack --filename cosmostation-extension.tgz",
+    "eslint": "eslint",
+    "patch:prerelease": "yarn version --prerelease --preid alpha --no-git-tag-version",
+    "postpatch:prerelease": "yarn run build",
+    "patch": "yarn version --patch --no-git-tag-version",
+    "postpatch": "yarn run build",
+    "minor": "yarn version --minor --no-git-tag-version",
+    "postminor": "yarn run build",
+    "major": "yarn version --major --no-git-tag-version",
+    "postmajor": "yarn run build",
+    "prepublish:latest": "yarn run build",
+    "publish:latest": "yarn publish cosmostation-extension.tgz --access public",
+    "prepublish:alpha": "yarn run build",
+    "publish:alpha": "yarn publish cosmostation-extension.tgz --tag alpha --access public"
+  },
+  "engines": {
+    "node": ">= 16.0.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/cosmostation/wallets.git"
+  },
+  "keywords": [
+    "cosmostation",
+    "extension"
+  ],
+  "license": "MIT",
+  "devDependencies": {
+    "@size-limit/preset-small-lib": "^4.6.2",
+    "@types/node": "^12.0.4",
+    "@typescript-eslint/eslint-plugin": "^5.59.11",
+    "@typescript-eslint/parser": "^5.59.11",
+    "eslint": "^8.42.0",
+    "eslint-config-prettier": "^8.8.0",
+    "microbundle": "^0.15.0",
+    "prettier": "^2.8.8",
+    "typescript": "^5.1.3"
+  },
+  "dependencies": {
+    "@cosmostation/wallets": "^2.0.0"
+  }
+}
