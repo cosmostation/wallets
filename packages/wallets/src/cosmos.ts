@@ -71,7 +71,7 @@ export interface CosmosSignMessageResponse {
   signature: string;
 }
 
-export interface SignOptions {
+export interface CosmosSignOptions {
   signer?: string;
   edit_mode?: { fee?: boolean; memo?: boolean };
 }
@@ -87,12 +87,12 @@ export interface CosmosMethods {
   signAmino: (
     chain_id: string,
     document: CosmosSignAminoDoc,
-    options?: SignOptions
+    options?: CosmosSignOptions
   ) => Promise<CosmosSignAminoResponse>;
   signDirect: (
     chain_id: string,
     document: CosmosSignDirectDoc,
-    options?: SignOptions
+    options?: CosmosSignOptions
   ) => Promise<CosmosSignDirectResponse>;
   sendTransaction: (
     chain_id: string,
@@ -123,16 +123,16 @@ export interface CosmosWallet {
   events: CosmosEvents;
 }
 
-export type RegistCosmosWallet = Omit<CosmosWallet, 'id'>;
+export type CosmosRegistWallet = Omit<CosmosWallet, 'id'>;
 
-export interface Amount {
+export interface CosmosAmount {
   denom: string;
 
   amount: number;
 }
 
-export interface Fee {
-  amount: Amount[];
+export interface CosmosFee {
+  amount: CosmosAmount[];
 
   gas_limit: number;
 
@@ -141,28 +141,28 @@ export interface Fee {
   granter?: string;
 }
 
-export interface Message {
+export interface CosmosProtoMessage {
   type_url: string;
   value?: unknown;
 }
 
-export interface PublicKey {
+export interface CosmosPublicKey {
   type_url?: string;
 
   key: string;
 }
 
-export interface Proto {
+export interface CosmosProto {
   chain_id: string;
 
   signer: string;
-  public_key: PublicKey;
+  public_key: CosmosPublicKey;
 
-  messages: Message[];
+  messages: CosmosProtoMessage[];
 
   memo?: string;
 
-  fee?: Fee;
+  fee?: CosmosFee;
 
   sequence?: number;
 
@@ -177,23 +177,23 @@ export interface Proto {
   granter?: string;
 }
 
-export interface ProtoResponse {
+export interface CosmosProtoResponse {
   auth_info_bytes: Uint8Array;
   body_bytes: Uint8Array;
   chain_id: string;
   account_number: string;
 }
 
-export interface ProtoBytes {
+export interface CosmosProtoBytes {
   auth_info_bytes: string | Uint8Array;
   body_bytes: string | Uint8Array;
 
   signature: string;
 }
 
-export type ProtoBytesResponse = string;
+export type CosmosProtoBytesResponse = string;
 
-export const registCosmosWallet = (wallet: RegistCosmosWallet) => {
+export const registCosmosWallet = (wallet: CosmosRegistWallet) => {
   if (window.__cosmosWallets == undefined) {
     window.__cosmosWallets = [];
   }
@@ -210,7 +210,7 @@ export const registCosmosWallet = (wallet: RegistCosmosWallet) => {
 
 export const getCosmosWallets = () => window.__cosmosWallets || [];
 
-export const getTxProto = async (params: Proto): Promise<ProtoResponse> => {
+export const getCosmosTxProto = async (params: CosmosProto): Promise<CosmosProtoResponse> => {
   const postResponse = await fetch('https://proto.mintscan.io/proto', {
     method: 'POST',
     body: JSON.stringify(params),
@@ -232,7 +232,7 @@ export const getTxProto = async (params: Proto): Promise<ProtoResponse> => {
   return { ...response, auth_info_bytes, body_bytes };
 };
 
-export const getTxProtoBytes = async (params: ProtoBytes): Promise<ProtoBytesResponse> => {
+export const getCosmosTxProtoBytes = async (params: CosmosProtoBytes): Promise<CosmosProtoBytesResponse> => {
   const auth_info_bytes =
     typeof params.auth_info_bytes === 'string' ? params.auth_info_bytes : toHexString(params.auth_info_bytes);
 
@@ -262,7 +262,7 @@ export const toUint8Array = (hexString: string) =>
 export const toHexString = (bytes: Uint8Array) =>
   bytes.reduce((str, byte) => str + byte.toString(16).padStart(2, '0'), '');
 
-export const getPublicKeyTypeURL = (type: string) => {
+export const getCosmosPublicKeyTypeURL = (type: string) => {
   switch (type) {
     case 'secp256k1':
       return '/cosmos.crypto.secp256k1.PublicKey';
