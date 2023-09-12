@@ -262,6 +262,7 @@ export async function verifyMessage(chainId: string, message: string, signature:
       chainName: chainId,
       message,
       signature,
+      signer: account.address,
       publicKey: account.public_key.value,
     },
   });
