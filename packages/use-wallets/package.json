@@ -61,6 +61,6 @@
     "typescript": "^5.1.3"
   },
   "dependencies": {
-    "@cosmostation/wallets": "^2.0.0"
+    "@cosmostation/wallets": "^2.0.1"
   }
 }
