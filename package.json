@@ -17,6 +17,7 @@
   "license": "ISC",
   "workspaces": [
     "packages/wallets",
-    "packages/use-wallets"
+    "packages/use-wallets",
+    "packages/extension"
   ]
 }
