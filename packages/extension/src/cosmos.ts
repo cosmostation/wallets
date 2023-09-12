@@ -96,23 +96,8 @@ export async function cosmos(chainId: string): Promise<Cosmos> {
     signAmino: (document: CosmosSignAminoDoc, options?: CosmosSignOptions) => signAmino(chainID, document, options),
     signDirect: (document: CosmosSignDirectDoc, options?: CosmosSignOptions) => signDirect(chainID, document, options),
     sendTransaction: (txBytes: string, mode?: number) => sendTransaction(chainID, txBytes, mode),
-    signAndSendTransaction: async (props: CosmosSignAndSendTransactionProps, options: CosmosSignOptions) => {
-      const account = await cosmosFunctions.requestAccount();
-
-      return await signAndSendTransaction(
-        chainID,
-        {
-          ...props,
-          chain_id: chainID,
-          public_key: {
-            type_url: account.public_key.type,
-            key: account.public_key.value,
-          },
-          signer: account.address,
-        },
-        options
-      );
-    },
+    signAndSendTransaction: (props: CosmosSignAndSendTransactionProps, options: CosmosSignOptions) =>
+      signAndSendTransaction(chainID, props, options),
     on,
     off,
   };
@@ -229,18 +214,28 @@ async function request({ method, params }: { method: string; params?: unknown })
 
 export async function signAndSendTransaction(
   chainId: string,
-  props: CosmosProto,
+  props: CosmosSignAndSendTransactionProps,
   options?: CosmosSignOptions
 ): Promise<CosmosSendTransactionResponse> {
-  const Cosmosproto = await getCosmosTxProto(props);
+  const account = await requestAccount(chainId);
+
+  const CosmosProto = await getCosmosTxProto({
+    ...props,
+    chain_id: chainId,
+    public_key: {
+      type_url: account.public_key.type,
+      key: account.public_key.value,
+    },
+    signer: account.address,
+  });
 
   const signDirectResponse = await signDirect(
     chainId,
     {
       chain_id: chainId,
-      auth_info_bytes: Cosmosproto.auth_info_bytes,
-      body_bytes: Cosmosproto.body_bytes,
-      account_number: Cosmosproto.account_number,
+      auth_info_bytes: CosmosProto.auth_info_bytes,
+      body_bytes: CosmosProto.body_bytes,
+      account_number: CosmosProto.account_number,
     },
     options
   );
