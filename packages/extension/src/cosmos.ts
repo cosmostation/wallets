@@ -16,6 +16,7 @@ import {
   CosmosProto,
   getCosmosTxProto,
   getCosmosTxProtoBytes,
+  CosmosSignMessageResponse,
 } from '@cosmostation/wallets';
 
 type CosmosType = '' | 'ETHERMINT';
@@ -98,6 +99,8 @@ export async function cosmos(chainId: string): Promise<Cosmos> {
     sendTransaction: (txBytes: string, mode?: number) => sendTransaction(chainID, txBytes, mode),
     signAndSendTransaction: (props: CosmosSignAndSendTransactionProps, options: CosmosSignOptions) =>
       signAndSendTransaction(chainID, props, options),
+    signMessage: (message: string) => signMessage(chainID, message),
+    verifyMessage: (message: string, signature: string) => verifyMessage(chainID, message, signature),
     on,
     off,
   };
@@ -208,10 +211,6 @@ export async function getSupportedChainIds(): Promise<string[]> {
   return [...response.official, ...response.unofficial];
 }
 
-async function request({ method, params }: { method: string; params?: unknown }) {
-  return await window.cosmostation.cosmos.request({ method, params });
-}
-
 export async function signAndSendTransaction(
   chainId: string,
   props: CosmosSignAndSendTransactionProps,
@@ -247,6 +246,41 @@ export async function signAndSendTransaction(
   const response = await sendTransaction(chainId, tx_bytes, 2);
 
   return response;
+}
+
+export async function signMessage(chainId: string, message: string): Promise<CosmosSignMessageResponse> {
+  const account = await requestAccount(chainId);
+
+  const response = await request({
+    method: 'cos_signMessage',
+    params: {
+      chainName: chainId,
+      message,
+      signer: account.address,
+    },
+  });
+
+  return response;
+}
+
+export async function verifyMessage(chainId: string, message: string, signature: string): Promise<boolean> {
+  const account = await requestAccount(chainId);
+
+  const response = await request({
+    method: 'cos_verifyMessage',
+    params: {
+      chainName: chainId,
+      message,
+      signature,
+      public_key: account.public_key.value,
+    },
+  });
+
+  return response;
+}
+
+async function request({ method, params }: { method: string; params?: unknown }) {
+  return await window.cosmostation.cosmos.request({ method, params });
 }
 
 function isInstalled(): Promise<boolean> {
