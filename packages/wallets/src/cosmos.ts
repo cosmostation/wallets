@@ -95,7 +95,7 @@ export interface CosmosAddChain {
   address_prefix: string;
   coingecko_id?: string;
   gas_rate?: CosmosGasRate;
-  cosmWasm?: boolean;
+  cosmwasm?: boolean;
 }
 
 type CosmosEventTypes = {
