@@ -76,6 +76,28 @@ export interface CosmosSignOptions {
   edit_mode?: { fee?: boolean; memo?: boolean };
 }
 
+export interface CosmosGasRate {
+  tiny: string;
+  low: string;
+  average: string;
+}
+
+export interface CosmosAddChain {
+  type?: '' | 'ETHERMINT';
+  chain_id: string;
+  chain_name: string;
+  lcd_url: string;
+  image_url?: string;
+  base_denom: string;
+  display_denom: string;
+  decimals?: number;
+  coin_type?: string;
+  address_prefix: string;
+  coingecko_id?: string;
+  gas_rate?: CosmosGasRate;
+  cosmWasm?: boolean;
+}
+
 type CosmosEventTypes = {
   AccountChanged: () => void;
 };
@@ -108,6 +130,8 @@ export interface CosmosMethods {
     signature: string,
     public_key: string
   ) => Promise<boolean>;
+  disconnect?: () => Promise<void>;
+  addChain?: (chain: CosmosAddChain) => Promise<void>;
 }
 
 export interface CosmosEvents {
@@ -127,17 +151,13 @@ export type CosmosRegistWallet = Omit<CosmosWallet, 'id'>;
 
 export interface CosmosAmount {
   denom: string;
-
   amount: number;
 }
 
 export interface CosmosFee {
   amount: CosmosAmount[];
-
   gas_limit: number;
-
   payer?: string;
-
   granter?: string;
 }
 
@@ -154,26 +174,16 @@ export interface CosmosPublicKey {
 
 export interface CosmosProto {
   chain_id: string;
-
   signer: string;
   public_key: CosmosPublicKey;
-
   messages: CosmosProtoMessage[];
-
   memo?: string;
-
   fee?: CosmosFee;
-
   sequence?: number;
-
   lcd_url?: string;
-
   fee_denom?: string;
-
   gas_rate?: number;
-
   payer?: string;
-
   granter?: string;
 }
 
