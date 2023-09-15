@@ -49,24 +49,6 @@ export interface CosmosSignDirectResponse {
   signed_doc: CosmosSignedDoc;
 }
 
-export interface CosmosSendTransactionResponse {
-  tx_response: {
-    code: number;
-    txhash: string;
-    raw_log?: unknown;
-    codespace?: unknown;
-    tx?: unknown;
-    log?: unknown;
-    info?: unknown;
-    height?: unknown;
-    gas_wanted?: unknown;
-    gas_used?: unknown;
-    events?: unknown;
-    data?: unknown;
-    timestamp?: unknown;
-  };
-}
-
 export interface CosmosSignMessageResponse {
   signature: string;
 }
@@ -119,11 +101,7 @@ export interface CosmosMethods {
     document: CosmosSignDirectDoc,
     options?: CosmosSignOptions
   ) => Promise<CosmosSignDirectResponse>;
-  sendTransaction: (
-    chain_id: string,
-    tx_bytes: Uint8Array | string,
-    mode?: number
-  ) => Promise<CosmosSendTransactionResponse>;
+  sendTransaction: (chain_id: string, tx_bytes: Uint8Array | string, mode?: number) => Promise<string>;
   signMessage?: (chainId: string, message: string, signer: string) => Promise<CosmosSignMessageResponse>;
   verifyMessage?: (
     chain_id: string,
