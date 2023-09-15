@@ -19,6 +19,11 @@ export default function useCosmosWallets() {
     [cosmosWallets, setCurrentWallet]
   );
 
+  const closeWallet = useCallback(() => {
+    currentWallet?.methods?.disconnect?.();
+    setCurrentWallet(null);
+  }, [currentWallet?.methods, setCurrentWallet]);
+
   const walletHandler = useCallback(() => {
     setCosmosWallets([...getCosmosWallets()]);
   }, [setCosmosWallets]);
@@ -35,5 +40,5 @@ export default function useCosmosWallets() {
     window.dispatchEvent(new CustomEvent('__cosmosWallets'));
   }, []);
 
-  return { cosmosWallets, currentWallet, selectWallet };
+  return { cosmosWallets, currentWallet, selectWallet, closeWallet };
 }

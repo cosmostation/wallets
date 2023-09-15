@@ -16,7 +16,7 @@ export type CosmosSignDirectDocument = Omit<CosmosSignDirectDoc, 'chain_id'>;
 export type CosmosSignAminoDocument = Omit<CosmosSignAminoDoc, 'chain_id'>;
 
 export default function useCosmosAccount(chainId: string) {
-  const { currentWallet } = useCosmosWallets();
+  const { currentWallet, closeWallet } = useCosmosWallets();
 
   const [account, setAccount] = useState<CosmosRequestAccountResponse | undefined>();
   const [error, setError] = useState<string | undefined>();
@@ -24,20 +24,24 @@ export default function useCosmosAccount(chainId: string) {
   const requestAccount = useCallback(async () => {
     try {
       if (currentWallet) {
-        const supportedChainIDs = await currentWallet.methods.getSupportedChainIds();
-        const responseAccount = supportedChainIDs.includes(chainId)
-          ? await currentWallet.methods.requestAccount(chainId)
-          : undefined;
+        await currentWallet.methods.connect(chainId);
 
-        setAccount(responseAccount);
-        setError(undefined);
+        try {
+          const responseAccount = await currentWallet.methods.getAccount(chainId);
+
+          setAccount(responseAccount);
+          setError(undefined);
+        } catch (e) {
+          setAccount(undefined);
+          setError(e.message);
+        }
       } else {
         setAccount(undefined);
         setError('No wallet selected');
       }
     } catch (e) {
       setAccount(undefined);
-      setError(e.message);
+      setError(`Unsupported chainId: ${chainId}`);
     }
   }, [chainId, currentWallet]);
 
@@ -91,18 +95,28 @@ export default function useCosmosAccount(chainId: string) {
       };
 
       const signMessage = async (message: string) => {
+        if (!methods.signMessage) {
+          throw new Error('signMessage is not supported');
+        }
         return methods.signMessage?.(chainId, message, account.address);
       };
 
       const verifyMessage = async (message: string, signature: string) => {
+        if (!methods.verifyMessage) {
+          throw new Error('verifyMessage is not supported');
+        }
         return methods.verifyMessage?.(chainId, message, account.address, signature, account.public_key.value);
       };
 
-      return { sendTransaction, signAmino, signDirect, signAndSendTransaction, signMessage, verifyMessage };
+      const disconnect = async () => {
+        closeWallet();
+      };
+
+      return { sendTransaction, signAmino, signDirect, signAndSendTransaction, signMessage, verifyMessage, disconnect };
     }
 
     return undefined;
-  }, [account, chainId, currentWallet]);
+  }, [account, chainId, closeWallet, currentWallet]);
 
   useEffect(() => {
     requestAccount();
