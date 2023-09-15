@@ -1,18 +1,4 @@
-import {
-  cosmos,
-  signAmino,
-  signAndSendTransaction,
-  signDirect,
-  sendTransaction,
-  requestAccount,
-  getSupportedChainIds,
-  addCosmosChain,
-  signMessage,
-  verifyMessage,
-  on,
-  off,
-  CosmosSignAndSendTransactionProps,
-} from './cosmos';
+import { cosmos, cosmosFunctions, CosmosSignAndSendTransactionProps } from './cosmos';
 import {
   CosmosSignAminoDoc,
   CosmosSignDirectDoc,
@@ -25,20 +11,6 @@ import {
   toUint8Array,
   toHexString,
 } from '@cosmostation/wallets';
-
-const cosmosFunctions = {
-  on,
-  off,
-  signAmino,
-  signAndSendTransaction,
-  signDirect,
-  sendTransaction,
-  requestAccount,
-  getSupportedChainIds,
-  addCosmosChain,
-  signMessage,
-  verifyMessage,
-};
 
 export {
   cosmos,

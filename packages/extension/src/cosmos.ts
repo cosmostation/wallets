@@ -66,6 +66,21 @@ type Cosmos = {
   disconnect: () => Promise<void>;
 };
 
+export const cosmosFunctions = {
+  on,
+  off,
+  signAmino,
+  signAndSendTransaction,
+  signDirect,
+  sendTransaction,
+  requestAccount,
+  getSupportedChainIds,
+  addCosmosChain,
+  signMessage,
+  verifyMessage,
+  disconnect,
+};
+
 export async function cosmos(chainId: string): Promise<Cosmos> {
   const chainID = chainId;
 
