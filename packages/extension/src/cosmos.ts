@@ -63,6 +63,7 @@ type Cosmos = {
   ) => Promise<CosmosSendTransactionResponse>;
   signMessage: (message: string) => Promise<CosmosSignMessageResponse>;
   verifyMessage: (message: string, signature: string) => Promise<boolean>;
+  disconnect: () => Promise<void>;
 };
 
 export async function cosmos(chainId: string): Promise<Cosmos> {
@@ -87,6 +88,7 @@ export async function cosmos(chainId: string): Promise<Cosmos> {
       signAndSendTransaction(chainID, props, options),
     signMessage: (message: string) => signMessage(chainID, message),
     verifyMessage: (message: string, signature: string) => verifyMessage(chainID, message, signature),
+    disconnect: () => disconnect(),
     on,
     off,
   };
@@ -268,6 +270,12 @@ export async function verifyMessage(chainId: string, message: string, signature:
   });
 
   return response;
+}
+
+export async function disconnect(): Promise<void> {
+  try {
+    await request({ method: 'cos_disconnect', params: undefined });
+  } catch {}
 }
 
 export function on<T extends CosmosEventTypeKeys>(type: T, listener: CosmosEventTypes[T]) {
