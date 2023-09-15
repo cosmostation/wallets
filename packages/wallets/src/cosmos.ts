@@ -83,16 +83,16 @@ export interface CosmosGasRate {
 }
 
 export interface CosmosAddChain {
-  type?: '' | 'ETHERMINT';
   chain_id: string;
   chain_name: string;
   lcd_url: string;
-  image_url?: string;
   base_denom: string;
   display_denom: string;
+  address_prefix: string;
+  type?: '' | 'ETHERMINT';
+  image_url?: string;
   decimals?: number;
   coin_type?: string;
-  address_prefix: string;
   coingecko_id?: string;
   gas_rate?: CosmosGasRate;
   cosmwasm?: boolean;
@@ -105,7 +105,9 @@ type CosmosEventTypes = {
 type CosmosEventTypeKeys = keyof CosmosEventTypes;
 
 export interface CosmosMethods {
-  requestAccount: (chainId: string) => Promise<CosmosRequestAccountResponse>;
+  connect: (chainIds: string | string[]) => Promise<void>;
+  getAccount: (chainId: string) => Promise<CosmosRequestAccountResponse>;
+  requestAccount?: (chainId: string) => Promise<CosmosRequestAccountResponse>;
   signAmino: (
     chain_id: string,
     document: CosmosSignAminoDoc,
@@ -121,7 +123,6 @@ export interface CosmosMethods {
     tx_bytes: Uint8Array | string,
     mode?: number
   ) => Promise<CosmosSendTransactionResponse>;
-  getSupportedChainIds: () => Promise<string[]>;
   signMessage?: (chainId: string, message: string, signer: string) => Promise<CosmosSignMessageResponse>;
   verifyMessage?: (
     chain_id: string,
@@ -132,6 +133,7 @@ export interface CosmosMethods {
   ) => Promise<boolean>;
   disconnect?: () => Promise<void>;
   addChain?: (chain: CosmosAddChain) => Promise<void>;
+  getSupportedChainIds: () => Promise<string[]>;
 }
 
 export interface CosmosEvents {
