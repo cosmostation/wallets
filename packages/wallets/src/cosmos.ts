@@ -74,6 +74,7 @@ export interface CosmosSignMessageResponse {
 export interface CosmosSignOptions {
   signer?: string;
   edit_mode?: { fee?: boolean; memo?: boolean };
+  is_check_balance?: boolean;
 }
 
 export interface CosmosGasRate {
