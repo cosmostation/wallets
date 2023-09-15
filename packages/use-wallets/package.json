@@ -1,6 +1,6 @@
 {
   "name": "@cosmostation/use-wallets",
-  "version": "2.0.4-alpha.4",
+  "version": "2.0.4",
   "description": "Wallets hook for react",
   "source": "src/index.ts",
   "main": "dist/index.js",
@@ -61,6 +61,6 @@
     "typescript": "^5.1.3"
   },
   "dependencies": {
-    "@cosmostation/wallets": "2.0.2-alpha.5"
+    "@cosmostation/wallets": "^2.0.2"
   }
 }
