@@ -1,6 +1,6 @@
 {
   "name": "@cosmostation/extension",
-  "version": "0.0.9",
+  "version": "0.0.10",
   "description": "Cosmostation Extension Wallet",
   "source": "src/index.ts",
   "main": "dist/index.js",
