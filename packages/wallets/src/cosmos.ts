@@ -90,7 +90,6 @@ type CosmosEventTypeKeys = keyof CosmosEventTypes;
 export interface CosmosMethods {
   connect: (chainIds: string | string[]) => Promise<void>;
   getAccount: (chainId: string) => Promise<CosmosRequestAccountResponse>;
-  requestAccount?: (chainId: string) => Promise<CosmosRequestAccountResponse>;
   signAmino: (
     chain_id: string,
     document: CosmosSignAminoDoc,
