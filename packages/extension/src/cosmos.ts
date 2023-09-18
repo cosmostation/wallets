@@ -11,7 +11,6 @@ import {
   CosmosSignOptions,
   CosmosSignDirectResponse,
   CosmosSignAminoResponse,
-  CosmosSendTransactionResponse,
   toUint8Array,
   CosmosProto,
   getCosmosTxProto,
@@ -56,11 +55,8 @@ type Cosmos = {
   requestAccount: () => Promise<CosmosRequestAccountResponse>;
   signAmino: (document: CosmosSignAminoDoc, options?: CosmosSignOptions) => Promise<CosmosSignAminoResponse>;
   signDirect: (document: CosmosSignDirectDoc, options?: CosmosSignOptions) => Promise<CosmosSignDirectResponse>;
-  sendTransaction: (txBytes: string, mode?: number) => Promise<CosmosSendTransactionResponse>;
-  signAndSendTransaction: (
-    props: CosmosSignAndSendTransactionProps,
-    options?: CosmosSignOptions
-  ) => Promise<CosmosSendTransactionResponse>;
+  sendTransaction: (txBytes: string, mode?: number) => Promise<string>;
+  signAndSendTransaction: (props: CosmosSignAndSendTransactionProps, options?: CosmosSignOptions) => Promise<string>;
   signMessage: (message: string) => Promise<CosmosSignMessageResponse>;
   verifyMessage: (message: string, signature: string) => Promise<boolean>;
   disconnect: () => Promise<void>;
@@ -190,11 +186,7 @@ export async function signDirect(
   }
 }
 
-export async function sendTransaction(
-  chainId: string,
-  txBytes: string,
-  mode?: number
-): Promise<CosmosSendTransactionResponse> {
+export async function sendTransaction(chainId: string, txBytes: string, mode?: number): Promise<string> {
   const txMode = mode ?? 2;
   const response = await request({
     method: 'cos_sendTransaction',
@@ -205,20 +197,22 @@ export async function sendTransaction(
     },
   });
 
-  return response;
-}
+  if (response?.tx_response?.code !== 0) {
+    if (typeof response.tx_response?.raw_log === 'string') {
+      throw new Error(response.tx_response.raw_log);
+    } else {
+      throw new Error('Unknown Error');
+    }
+  }
 
-export async function getSupportedChainIds(): Promise<string[]> {
-  const response = await request({ method: 'cos_supportedChainIds' });
-
-  return [...response.official, ...response.unofficial];
+  return response.tx_response.txhash;
 }
 
 export async function signAndSendTransaction(
   chainId: string,
   props: CosmosSignAndSendTransactionProps,
   options?: CosmosSignOptions
-): Promise<CosmosSendTransactionResponse> {
+): Promise<string> {
   const account = await requestAccount(chainId);
 
   const CosmosProto = await getCosmosTxProto({
@@ -285,6 +279,11 @@ export async function verifyMessage(chainId: string, message: string, signature:
   });
 
   return response;
+}
+
+export async function getSupportedChainIds(): Promise<string[]> {
+  const response = await request({ method: 'cos_supportedChainIds', params: undefined });
+  return [...response.official, ...response.unofficial];
 }
 
 export async function disconnect(): Promise<void> {
