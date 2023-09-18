@@ -1,5 +1,5 @@
 import {
-  registCosmosWallet,
+  registerCosmosWallet,
   getCosmosWallets,
   CosmosWallet,
   CosmosEvents,
@@ -10,7 +10,7 @@ import {
   CosmosSignAminoResponse,
   CosmosSignDirectDoc,
   CosmosSignDirectResponse,
-  CosmosRegistWallet,
+  CosmosRegisterWallet,
   CosmosProtoResponse,
   CosmosProtoBytesResponse,
   getCosmosTxProto,
@@ -30,7 +30,7 @@ import {
 } from './cosmos';
 
 export {
-  registCosmosWallet,
+  registerCosmosWallet,
   getCosmosWallets,
   getCosmosTxProto,
   getCosmosTxProtoBytes,
@@ -44,7 +44,7 @@ export {
   CosmosSignAminoResponse,
   CosmosSignDirectDoc,
   CosmosSignDirectResponse,
-  CosmosRegistWallet,
+  CosmosRegisterWallet,
   CosmosProtoResponse,
   CosmosProtoBytesResponse,
   CosmosSignOptions,

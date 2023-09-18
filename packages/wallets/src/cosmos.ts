@@ -128,7 +128,7 @@ export interface CosmosWallet {
   events: CosmosEvents;
 }
 
-export type CosmosRegistWallet = Omit<CosmosWallet, 'id'>;
+export type CosmosRegisterWallet = Omit<CosmosWallet, 'id'>;
 
 export interface CosmosAmount {
   denom: string;
@@ -184,7 +184,7 @@ export interface CosmosProtoBytes {
 
 export type CosmosProtoBytesResponse = string;
 
-export const registCosmosWallet = (wallet: CosmosRegistWallet) => {
+export const registerCosmosWallet = (wallet: CosmosRegisterWallet) => {
   if (window.__cosmosWallets == undefined) {
     window.__cosmosWallets = [];
   }
