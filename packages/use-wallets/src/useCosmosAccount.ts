@@ -7,8 +7,10 @@ import {
   getCosmosTxProto,
   getCosmosTxProtoBytes,
 } from '@cosmostation/wallets';
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import useCosmosWallets from './useCosmosWallets';
+import { useQuery } from '@tanstack/react-query';
+import { ReactQueryContext } from './CosmosProvider';
 
 export type CosmosSignAndSendTransactionProps = Omit<CosmosProto, 'chain_id' | 'signer' | 'public_key'>;
 
@@ -21,29 +23,29 @@ export default function useCosmosAccount(chainId: string) {
   const [account, setAccount] = useState<CosmosRequestAccountResponse | undefined>();
   const [error, setError] = useState<string | undefined>();
 
-  const requestAccount = useCallback(async () => {
-    try {
-      if (currentWallet) {
-        await currentWallet.methods.connect(chainId);
-
-        try {
-          const responseAccount = await currentWallet.methods.getAccount(chainId);
-
-          setAccount(responseAccount);
-          setError(undefined);
-        } catch (e) {
-          setAccount(undefined);
-          setError(e.message);
-        }
-      } else {
-        setAccount(undefined);
-        setError('No wallet selected');
+  const { refetch } = useQuery({
+    context: ReactQueryContext,
+    queryKey: [currentWallet, chainId],
+    queryFn: () => {
+      if (!currentWallet) {
+        throw new Error('No wallet selected');
       }
-    } catch (e) {
+      return currentWallet?.methods?.getAccount(chainId);
+    },
+    onError: (e: Error) => {
+      setError(e.message);
       setAccount(undefined);
-      setError(`Unsupported chainId: ${chainId}`);
-    }
-  }, [chainId, currentWallet]);
+    },
+    onSuccess: (data) => {
+      setAccount(data);
+      setError(undefined);
+    },
+    refetchOnMount: false,
+    refetchOnReconnect: false,
+    refetchOnWindowFocus: false,
+    refetchInterval: false,
+    retry: false,
+  });
 
   const methods = useMemo(() => {
     if (currentWallet && account) {
@@ -112,22 +114,26 @@ export default function useCosmosAccount(chainId: string) {
         closeWallet();
       };
 
-      return { sendTransaction, signAmino, signDirect, signAndSendTransaction, signMessage, verifyMessage, disconnect };
+      return {
+        sendTransaction,
+        signAmino,
+        signDirect,
+        signAndSendTransaction,
+        signMessage,
+        verifyMessage,
+        disconnect,
+      };
     }
 
     return undefined;
   }, [account, chainId, closeWallet, currentWallet]);
 
   useEffect(() => {
-    requestAccount();
-  }, [requestAccount]);
-
-  useEffect(() => {
-    currentWallet?.events.on('AccountChanged', requestAccount);
+    currentWallet?.events.on('AccountChanged', refetch);
     return () => {
-      currentWallet?.events.off('AccountChanged', requestAccount);
+      currentWallet?.events.off('AccountChanged', refetch);
     };
-  }, [currentWallet?.events, requestAccount]);
+  }, [currentWallet?.events, refetch]);
 
   const returnData = useMemo(() => {
     if (account) {
@@ -140,6 +146,6 @@ export default function useCosmosAccount(chainId: string) {
   return {
     data: returnData,
     error,
-    mutate: requestAccount,
+    mutate: refetch,
   };
 }

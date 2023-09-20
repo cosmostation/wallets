@@ -61,6 +61,7 @@
     "typescript": "^5.1.3"
   },
   "dependencies": {
-    "@cosmostation/wallets": "^2.0.5"
+    "@cosmostation/wallets": "^2.0.5",
+    "@tanstack/react-query": "^4.35.3"
   }
 }

@@ -1,6 +1,7 @@
 import type { ReactNode } from 'react';
 import { createContext, useMemo, useState } from 'react';
 import type { CosmosWallet } from '@cosmostation/wallets';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 
 type CosmosWalletContextProps = {
   children: ReactNode;
@@ -15,6 +16,10 @@ type CosmosValues = {
   cosmosWallets: CosmosWallet[];
   currentWallet: CosmosWallet | null;
 };
+
+const queryClient = new QueryClient();
+
+export const ReactQueryContext = createContext<QueryClient | undefined>(undefined);
 
 export const CosmosActionsContext = createContext<CosmosActions | null>(null);
 export const CosmosValuesContext = createContext<CosmosValues | null>(null);
@@ -38,7 +43,11 @@ export default function CosmosWalletContext({ children }: CosmosWalletContextPro
 
   return (
     <CosmosActionsContext.Provider value={cosmosActions}>
-      <CosmosValuesContext.Provider value={cosmosValues}>{children}</CosmosValuesContext.Provider>
+      <CosmosValuesContext.Provider value={cosmosValues}>
+        <QueryClientProvider client={queryClient} context={ReactQueryContext}>
+          {children}
+        </QueryClientProvider>
+      </CosmosValuesContext.Provider>
     </CosmosActionsContext.Provider>
   );
 }
