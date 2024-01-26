@@ -165,6 +165,7 @@ export interface CosmosProto {
   payer?: string;
   granter?: string;
   gas_coefficient?: number;
+  gas_limit?: number;
 }
 
 export interface CosmosProtoResponse {
