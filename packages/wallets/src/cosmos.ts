@@ -148,7 +148,6 @@ export interface CosmosProtoMessage {
 
 export interface CosmosPublicKey {
   type_url?: string;
-
   key: string;
 }
 
