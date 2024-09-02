@@ -116,10 +116,13 @@ export interface CosmosMethods {
 }
 
 export interface CosmosEvents {
-  on: <T extends CosmosEventTypeKeys>(type: T, listener: CosmosEventTypes[T]) => void;
+  on: <T extends CosmosEventTypeKeys>(
+    type: T,
+    listener: CosmosEventTypes[T]
+  ) => ((event: MessageEvent<ListenerMessage>) => void) | void;
   off: <T extends CosmosEventTypeKeys>(
     type: T | ((event: MessageEvent<ListenerMessage>) => void),
-    listener?: CosmosEventTypes[T]
+    listener: CosmosEventTypes[T]
   ) => void;
 }
 
@@ -142,7 +145,7 @@ export interface CosmosWallet {
   name: string;
   logo: string;
   methods: CosmosMethods;
-  handlerInfos: HanlderInfo[];
+  handlerInfos?: HanlderInfo[];
   events: CosmosEvents;
 }
 
