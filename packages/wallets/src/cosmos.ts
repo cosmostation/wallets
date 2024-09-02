@@ -124,7 +124,7 @@ export interface CosmosEvents {
 }
 
 export interface CosmosEventListenerMessage<T = unknown> {
-  type: 'accountChanged' | 'chainChanged';
+  type: string;
   message?: T;
 }
 
