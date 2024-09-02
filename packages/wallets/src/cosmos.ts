@@ -119,22 +119,19 @@ export interface CosmosEvents {
   on: <T extends CosmosEventTypeKeys>(
     type: T,
     listener: CosmosEventTypes[T]
-  ) => ((event: MessageEvent<ListenerMessage>) => void) | void;
+  ) => ((event: MessageEvent<CosmosEventListenerMessage>) => void) | void;
   off: <T extends CosmosEventTypeKeys>(type: T, listener: CosmosEventTypes[T]) => void;
 }
 
-export type ListenerMessage<T = unknown> = {
-  isCosmostation: boolean;
-  line: 'COSMOS';
+export interface CosmosEventListenerMessage<T = unknown> {
   type: 'accountChanged' | 'chainChanged';
-  messae?: T;
-};
+  message?: T;
+}
 
 export interface HanlderInfo {
-  line: 'COSMOS';
   eventName: string;
   originHandler: (data: unknown) => void;
-  handler: (event: MessageEvent<ListenerMessage>) => void;
+  handler: (event: MessageEvent<CosmosEventListenerMessage>) => void;
 }
 
 export interface CosmosWallet {
