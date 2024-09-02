@@ -120,10 +120,7 @@ export interface CosmosEvents {
     type: T,
     listener: CosmosEventTypes[T]
   ) => ((event: MessageEvent<ListenerMessage>) => void) | void;
-  off: <T extends CosmosEventTypeKeys>(
-    type: T | ((event: MessageEvent<ListenerMessage>) => void),
-    listener: CosmosEventTypes[T]
-  ) => void;
+  off: <T extends CosmosEventTypeKeys>(type: T, listener: CosmosEventTypes[T]) => void;
 }
 
 export type ListenerMessage<T = unknown> = {
