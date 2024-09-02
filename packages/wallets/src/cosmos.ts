@@ -83,6 +83,7 @@ export interface CosmosAddChain {
 
 type CosmosEventTypes = {
   AccountChanged: () => void;
+  ChainChanged: (data?: unknown) => void;
 };
 
 type CosmosEventTypeKeys = keyof CosmosEventTypes;
@@ -116,7 +117,24 @@ export interface CosmosMethods {
 
 export interface CosmosEvents {
   on: <T extends CosmosEventTypeKeys>(type: T, listener: CosmosEventTypes[T]) => void;
-  off: <T extends CosmosEventTypeKeys>(type: T, listener: CosmosEventTypes[T]) => void;
+  off: <T extends CosmosEventTypeKeys>(
+    type: T | ((event: MessageEvent<ListenerMessage>) => void),
+    listener?: CosmosEventTypes[T]
+  ) => void;
+}
+
+export type ListenerMessage<T = unknown> = {
+  isCosmostation: boolean;
+  line: 'COSMOS';
+  type: 'accountChanged' | 'chainChanged';
+  messae?: T;
+};
+
+export interface HanlderInfo {
+  line: 'COSMOS';
+  eventName: string;
+  originHandler: (data: unknown) => void;
+  handler: (event: MessageEvent<ListenerMessage>) => void;
 }
 
 export interface CosmosWallet {
@@ -124,6 +142,7 @@ export interface CosmosWallet {
   name: string;
   logo: string;
   methods: CosmosMethods;
+  handlerInfos: HanlderInfo[];
   events: CosmosEvents;
 }
 
