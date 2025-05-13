@@ -1036,11 +1036,6 @@
     "@babel/helper-validator-identifier" "^7.22.5"
     to-fast-properties "^2.0.0"
 
-"@cosmostation/wallets@^2.0.5":
-  version "2.0.8"
-  resolved "https://registry.yarnpkg.com/@cosmostation/wallets/-/wallets-2.0.8.tgz#ac7d282a4ef5f8f59abea03f468a241cb8bd65f4"
-  integrity sha512-aATHn2jLjO+RFpw5PFgXZQjx/HuDls6D2FmZviuuxQXAdTTgwsSGaYFGwvmggoFFP2IEzhtZlFqod7rwuCosTQ==
-
 "@discoveryjs/json-ext@0.5.7":
   version "0.5.7"
   resolved "https://registry.yarnpkg.com/@discoveryjs/json-ext/-/json-ext-0.5.7.tgz#1d572bfbbe14b7704e0ba0f39b74815b84870d70"
