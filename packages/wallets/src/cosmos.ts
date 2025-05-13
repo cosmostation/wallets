@@ -35,6 +35,23 @@ export interface CosmosRequestAccountResponse {
   is_ledger?: boolean;
 }
 
+export type SettledResponse<T> =
+  | {
+      status: 'fulfilled';
+      value: T;
+    }
+  | {
+      status: 'rejected';
+      reason: Error;
+    };
+export type SettledResponses<T> = SettledResponse<T>[];
+
+export interface CosmosRequestAccountWithChainId extends CosmosRequestAccountResponse {
+  chain_id: string;
+}
+
+export type CosmosRequestAccountsSettledResponse = SettledResponses<CosmosRequestAccountWithChainId>;
+
 export interface CosmosSignAminoResponse {
   signature: string;
   signed_doc: any;
@@ -90,6 +107,7 @@ type CosmosEventTypeKeys = keyof CosmosEventTypes;
 export interface CosmosMethods {
   connect: (chainIds: string | string[]) => Promise<void>;
   getAccount: (chainId: string) => Promise<CosmosRequestAccountResponse>;
+  getAccountsSettled: (chainIds: string[]) => Promise<CosmosRequestAccountsSettledResponse>;
   signAmino: (
     chain_id: string,
     document: CosmosSignAminoDoc,
