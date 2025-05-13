@@ -46,7 +46,11 @@ export type SettledResponse<T> =
     };
 export type SettledResponses<T> = SettledResponse<T>[];
 
-export type CosmosRequestAccountsSettledResponse = SettledResponses<CosmosRequestAccountResponse>;
+export interface CosmosRequestAccountWithChainId extends CosmosRequestAccountResponse {
+  chain_id: string;
+}
+
+export type CosmosRequestAccountsSettledResponse = SettledResponses<CosmosRequestAccountWithChainId>;
 
 export interface CosmosSignAminoResponse {
   signature: string;
