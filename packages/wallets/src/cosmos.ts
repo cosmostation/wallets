@@ -5,6 +5,7 @@ declare global {
 }
 
 export type CosmosPublicKeyType = 'secp256k1' | 'ethsecp256k1';
+export type CosmosPublicKeyTypeUrl = string; // Full protobuf type URL path for public key (e.g., "/cosmos.crypto.secp256k1.PubKey", "/ethermint.crypto.v1.ethsecp256k1.PubKey")
 
 export interface CosmosSignAminoDoc {
   chain_id: string;
@@ -29,6 +30,7 @@ export interface CosmosRequestAccountResponse {
   address: string;
   public_key: {
     type: CosmosPublicKeyType;
+    type_url: CosmosPublicKeyTypeUrl;
     value: string;
   };
   name?: string;
