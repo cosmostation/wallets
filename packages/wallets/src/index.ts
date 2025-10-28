@@ -28,6 +28,7 @@ import {
   CosmosPublicKey,
   CosmosProto,
   CosmosProtoBytes,
+  CosmosEventListenerMessage,
 } from './cosmos';
 
 export {
@@ -58,6 +59,7 @@ export {
   CosmosFee,
   CosmosProtoMessage,
   CosmosPublicKey,
+  CosmosEventListenerMessage,
   toHexString,
   toUint8Array,
 };
